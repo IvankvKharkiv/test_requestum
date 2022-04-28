@@ -1,0 +1,47 @@
+version: "3.8"
+
+services: 
+    nginx:
+        build:
+            context: ./
+            dockerfile: docker/nginx.dockerfile
+        image: nginx
+        ports: 
+            - 8081:80
+        links:
+            - fpm
+        volumes: 
+            - ./app:/var/www/test_requestum.com
+            - ./docker/xdebug.conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+        environment:
+            PHP_IDE_CONFIG: "serverName=test_requestum.com"
+
+    fpm:
+        build:
+            context: ./
+            dockerfile: docker/fpm.dockerfile
+        volumes: 
+            - ./app:/var/www/test_requestum.com
+            - ./docker/xdebug.conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+        environment:
+            PHP_IDE_CONFIG: "serverName=test_requestum.com"
+        links: 
+            - mysql
+    mysql:
+        image: mysql
+        ports:
+            - 3306:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=symfony_api_learning
+        volumes:
+            -   ./docker/sqldatadir:/var/lib/mysql
+
+
+    mailer:
+        image: tophfr/mailcatcher
+        ports:
+            - 1080:80
+            - 1081:25
+
+                

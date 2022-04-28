@@ -1,0 +1,1 @@
+XDEBUG_TRIGGER=yes php -d xdebug.client_host=172.18.0.1 vendor/bin/phpunit /var/www/test_requestum.com/tests.php
