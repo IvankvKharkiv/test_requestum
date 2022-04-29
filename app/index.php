@@ -31,6 +31,13 @@ function merge($input)
     }
 
     for ($i = 0; $i < (count($arrArray) - 1); $i++) {
+        //Look into this if statement and read comments at the end of this file
+        if ($arrArray[$i + 1][0] <= $arrArray[$i][1] && $arrArray[$i + 1][1] <= $arrArray[$i][1]) {
+            unset($arrArray[$i + 1]);
+            $arrArray = array_values($arrArray);
+            $i--;
+            continue;
+        }
         if ($arrArray[$i + 1][0] <= $arrArray[$i][1]) {
             $arrArray[$i] = [$arrArray[$i][0], $arrArray[$i + 1][1]];
             unset($arrArray[$i + 1]);
@@ -67,3 +74,15 @@ function toDate($arr)
 {
     return [date('Y-m-d H:i:s', $arr[0]), date('Y-m-d H:i:s', $arr[1])];
 }
+
+
+/*
+Without if statement on line 35 tests which you provided will succeed and the array below will fail.
+Add array below to your test cases.
+$testArr = [
+    ['2021-03-24 12:00:00', '2021-03-24 15:00:00'],
+    ['2021-03-23 12:00:00', '2021-03-23 15:00:00'],
+    ['2021-03-23 13:00:00', '2021-03-23 14:00:00'],
+    ['2021-03-23 12:00:00', '2021-03-23 16:00:00'],
+];*/
+
